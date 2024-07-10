@@ -38,4 +38,12 @@ pub fn build(b: *std.Build) void {
 
     module.linkSystemLibrary("c", .{});
     module.linkSystemLibrary("dbus-1", .{});
+
+    const my_tests = b.addTest(.{
+        .root_source_file = b.path("src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    my_tests.root_module.addImport("dbussignal", module);
 }
