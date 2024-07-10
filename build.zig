@@ -36,6 +36,6 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    module.linkSystemLibrary("c");
-    module.linkSystemLibrary("dbus-1");
+    module.linkSystemLibrary("c", .{});
+    module.linkSystemLibrary("dbus-1", .{});
 }
