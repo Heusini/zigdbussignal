@@ -13,7 +13,7 @@ pub fn build(b: *std.Build) void {
     // Standard optimization options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
     // set a preferred release mode, allowing the user to decide how to optimize.
-    const optimize = b.standardOptimizeOption(.{});
+    const optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .ReleaseSmall });
 
     const lib = b.addStaticLibrary(.{
         .name = "zigdbussignal",
@@ -30,4 +30,12 @@ pub fn build(b: *std.Build) void {
     lib.linkLibC();
     lib.linkSystemLibrary("dbus-1");
     b.installArtifact(lib);
+    const module = b.addModule("dbussignal", .{
+        .root_source_file = .{ .path = "src/dbus.zig" },
+        .target = target,
+        .optimize = optimize,
+    });
+
+    module.linkSystemLibrary("c");
+    module.linkSystemLibrary("dbus-1");
 }
