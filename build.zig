@@ -31,7 +31,7 @@ pub fn build(b: *std.Build) void {
     lib.linkSystemLibrary("dbus-1");
     b.installArtifact(lib);
     const module = b.addModule("dbussignal", .{
-        .root_source_file = .{ .path = "src/dbus.zig" },
+        .root_source_file = b.path("src/dbus.zig"),
         .target = target,
         .optimize = optimize,
     });
