@@ -56,12 +56,11 @@ pub const DBus = struct {
                     return error.NoMessagePayload;
                 } else {
                     dbus.dbus_message_iter_get_basic(&args, sigval_ptr);
-                    // std.debug.print("Message from dbus: {s}\n", .{sigvalue});
+                    // std.debug.print("Message from dbus: {s}\n", .{sigval});
                     const sigval_len = std.mem.len(sigval);
                     const value = try allocator.alloc(u8, sigval_len);
                     std.mem.copyForwards(u8, value, sigval[0..sigval_len]);
-                    dbus.dbus_free(sigval_ptr);
-
+                    dbus.dbus_message_unref(msg);
                     return value;
                 }
             }
