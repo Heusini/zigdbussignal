@@ -46,4 +46,8 @@ pub fn build(b: *std.Build) void {
     });
 
     my_tests.root_module.addImport("dbussignal", module);
+
+    const run_exe_unit_tests = b.addRunArtifact(my_tests);
+    const test_step = b.step("test", "Run tests");
+    test_step.dependOn(&run_exe_unit_tests.step);
 }

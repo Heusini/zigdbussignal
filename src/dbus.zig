@@ -10,12 +10,12 @@ const DBusError = extern struct {
 
 pub const DBus = struct {
     conn: *dbus.DBusConnection,
-    interface: []const u8,
-    path: []const u8,
+    interface: [:0]const u8,
+    path: [:0]const u8,
 
     const Self = @This();
 
-    pub fn init(comptime path: []const u8, comptime interface: []const u8) !Self {
+    pub fn init(comptime path: [:0]const u8, comptime interface: [:0]const u8) !Self {
         const filter = "type='signal',interface='" ++ interface ++ "'";
 
         var buf: DBusError = undefined;
@@ -70,7 +70,7 @@ pub const DBus = struct {
         return null;
     }
 
-    pub fn send_message(self: *Self, msg_type: []const u8, msg: []const u8) !void {
+    pub fn send_message(self: *Self, msg_type: [:0]const u8, msg: [:0]u8) !void {
         var args: dbus.DBusMessageIter = undefined;
         var serial: u32 = 0;
 
@@ -81,7 +81,8 @@ pub const DBus = struct {
             return error.CreateDBusMessageError;
         }
 
-        const items: ?*anyopaque = @ptrCast(&msg);
+        var msg_tmp = msg;
+        const items: ?*anyopaque = @ptrCast(&msg_tmp);
 
         dbus.dbus_message_iter_init_append(message, &args);
         if (dbus.dbus_message_iter_append_basic(&args, dbus.DBUS_TYPE_STRING, items) == 0) {
