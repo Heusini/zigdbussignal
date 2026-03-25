@@ -14,7 +14,7 @@
 
     .fingerprint = 0x15ace53e5a27ec96,
 
-    .minimum_zig_version = "0.14.0",
+    .minimum_zig_version = "0.15.0",
 
     .dependencies = .{
         // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
